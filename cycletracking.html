@@ -1,0 +1,91 @@
+<!-- Cycle tracking -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SheSync - Cycle Tracker</title>
+  <link rel="stylesheet" href="cycletracking.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Track Your Cycle</h2>
+    <label for="startDate">Start Date of Last Period:</label>
+    <input type="date" id="startDate" />
+
+    <label for="cycleLength">Average Cycle Length (days):</label>
+    <input type="number" id="cycleLength" value="28" min="21" max="35" />
+
+    <label for="periodLength">Period Duration (days):</label>
+    <input type="number" id="periodLength" value="5" min="1" max="10" />
+
+    <button onclick="predictCycle()">Track</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function predictCycle() {
+      const button = document.querySelector('button');
+      const resultDiv = document.getElementById('result');
+      
+      // Add loading state
+      button.classList.add('loading');
+      button.disabled = true;
+      
+      setTimeout(() => {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const cycleLength = parseInt(document.getElementById('cycleLength').value);
+        const periodLength = parseInt(document.getElementById('periodLength').value);
+
+        if (isNaN(startDate.getTime())) {
+          alert("Please enter a valid date.");
+          button.classList.remove('loading');
+          button.disabled = false;
+          return;
+        }
+
+        if (cycleLength < 21 || cycleLength > 35) {
+          alert("Cycle length should be between 21-35 days for accurate prediction.");
+          button.classList.remove('loading');
+          button.disabled = false;
+          return;
+        }
+
+        const nextPeriodStart = new Date(startDate);
+        nextPeriodStart.setDate(startDate.getDate() + cycleLength);
+
+        const periodEnd = new Date(nextPeriodStart);
+        periodEnd.setDate(nextPeriodStart.getDate() + periodLength - 1);
+
+        // Calculate ovulation and fertile window
+        const ovulationDate = new Date(nextPeriodStart);
+        ovulationDate.setDate(nextPeriodStart.getDate() - 14);
+
+        const fertileStart = new Date(ovulationDate);
+        fertileStart.setDate(ovulationDate.getDate() - 5);
+
+        const fertileEnd = new Date(ovulationDate);
+        fertileEnd.setDate(ovulationDate.getDate() + 1);
+
+        // Enhanced result display
+        resultDiv.innerHTML = `
+          <p><span class="emoji">🩸</span><strong>Next Period:</strong> ${nextPeriodStart.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p><span class="emoji">📅</span><strong>Period Ends:</strong> ${periodEnd.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p><span class="emoji">🥚</span><strong>Ovulation:</strong> ${ovulationDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p><span class="emoji">💕</span><strong>Fertile Window:</strong> ${fertileStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${fertileEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+          <p style="margin-top: 15px; font-size: 0.95em; color: #666;"><em>💡 Note: These are estimates based on average cycles. Individual variations are normal.</em></p>
+        `;
+        
+        resultDiv.classList.add('show');
+        
+        // Remove loading state
+        button.classList.remove('loading');
+        button.disabled = false;
+        
+        // Scroll to results
+        resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1000); // Simulate processing time
+    }
+  </script>
+</body>
+</html>

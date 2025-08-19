@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SheSync - Dashboard</title>
+  
+  <!-- FullCalendar CSS and JS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="dashboard.css" />
+  
+  <!-- Period Prediction Script -->
+  <script src="period_predictor.js"></script>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo-with-text">
+      <img src="LOGOO.png" alt="SheSync Logo" />
+      <span class="brand-name">SheSync</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#tracker" onclick="openSection('tracker')">Tracker</a>
+      <a href="#insights" onclick="openSection('insights')">Insights</a>
+      <a href="#nutrition" onclick="openSection('nutrition')">Nutrition</a>
+      <a href="#articles" onclick="openSection('articles')">Articles</a>
+    </nav>
+    <a href="#" id="openLogoutModal" class="logout-link">Logout</a>
+  </header>
+
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeLogoutModal">&times;</span>
+      <h3>Are you sure you want to log out?</h3>
+      <div class="logout-buttons">
+        <button id="confirmLogout" class="logout-confirm">Yes, Logout</button>
+        <button id="cancelLogout" class="logout-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard -->
+  <div class="main-container">
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <h2>Your Cycle Calendar</h2>
+      <div class="period-input-section">
+        <div class="input-group">
+          <label for="lastPeriodDate">Last Period Start Date:</label>
+          <input type="date" id="lastPeriodDate">
+        </div>
+        <div class="input-group">
+          <label for="cycleLength">Cycle Length (days):</label>
+          <input type="number" id="cycleLength" value="28" min="21" max="45">
+        </div>
+        <div class="input-group">
+          <label for="periodLength">Period Duration (days):</label>
+          <input type="number" id="periodLength" value="5" min="1" max="10">
+        </div>
+        <button onclick="updateCycleTracking()" class="update-btn">Update Cycle</button>
+      </div>
+      <div id="calendar"></div>
+      
+      <!-- Calendar Legend with enhanced colors -->
+      <div class="calendar-legend">
+        <h3>Cycle Phase Legend</h3>
+        <div class="legend-item">
+          <span class="legend-color period"></span>
+          <span>Period Days (Red - #e74c3c)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color ovulation"></span>
+          <span>Ovulation Day (Green - #2ecc71)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color fertile"></span>
+          <span>Fertile Window (Blue - #3498db)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color pms"></span>
+          <span>PMS Days (Purple - #9b59b6)</span>
+        </div>
+      </div>
+
+      <!-- AI Period Prediction Section -->
+      <div class="prediction-section">
+        <h3>🤖 AI Period Prediction</h3>
+        <p>Get personalized predictions based on machine learning analysis of menstrual cycle patterns</p>
+        <button onclick="generatePrediction()" class="prediction-btn">Generate Smart Prediction</button>
+        <div id="predictionResult" class="prediction-result" style="display: none;">
+          <h4>📊 Your Personalized Prediction</h4>
+          <div id="predictionContent"></div>
+          <div class="prediction-accuracy">
+            <small>Prediction accuracy improves with more cycle data</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      
+      <!-- Symptom Tracker -->
+      <div class="feature-card" id="tracker-section">
+        <h3>Daily Symptom Tracker</h3>
+        <div class="symptom-tracker">
+          <div class="symptom-group">
+            <h4>Physical Symptoms</h4>
+            <label><input type="checkbox" class="symptom-check" data-symptom="cramps"> Cramps</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="bloating"> Bloating</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="headache"> Headache</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="fatigue"> Fatigue</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="backache"> Back Pain</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="acne"> Acne/Skin Issues</label>
+          </div>
+          
+          <div class="symptom-group">
+            <h4>Mood & Energy</h4>
+            <label><input type="checkbox" class="symptom-check" data-symptom="irritable"> Irritability</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="anxious"> Anxiety</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="sad"> Low Mood</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="energetic"> High Energy</label>
+            <label><input type="checkbox" class="symptom-check" data-symptom="sleepy"> Drowsiness</label>
+          </div>
+
+          <div class="flow-tracker">
+            <h4>Flow Intensity</h4>
+            <select id="flowIntensity">
+              <option value="">Select Flow</option>
+              <option value="none">No Flow</option>
+              <option value="spotting">Spotting</option>
+              <option value="light">Light</option>
+              <option value="medium">Medium</option>
+              <option value="heavy">Heavy</option>
+            </select>
+          </div>
+
+          <button onclick="saveSymptoms()" class="save-btn">Save Today's Data</button>
+        </div>
+      </div>
+
+      <!-- PCOD/PCOS Support -->
+      <div class="feature-card" id="insights-section">
+        <h3>PCOD/PCOS Support & Insights</h3>
+        <div class="pcos-content">
+          <div class="risk-assessment">
+            <h4>Risk Assessment Quiz</h4>
+            <div class="quiz-question">
+              <p>Do you experience irregular periods (cycles longer than 35 days or shorter than 21 days)?</p>
+              <label><input type="radio" name="q1" value="yes"> Yes</label>
+              <label><input type="radio" name="q1" value="no"> No</label>
+            </div>
+            <div class="quiz-question">
+              <p>Do you have excessive hair growth on face, chest, or back?</p>
+              <label><input type="radio" name="q2" value="yes"> Yes</label>
+              <label><input type="radio" name="q2" value="no"> No</label>
+            </div>
+            <div class="quiz-question">
+              <p>Do you struggle with weight gain or difficulty losing weight?</p>
+              <label><input type="radio" name="q3" value="yes"> Yes</label>
+              <label><input type="radio" name="q3" value="no"> No</label>
+            </div>
+            <div class="quiz-question">
+              <p>Do you experience severe acne or oily skin?</p>
+              <label><input type="radio" name="q4" value="yes"> Yes</label>
+              <label><input type="radio" name="q4" value="no"> No</label>
+            </div>
+            <button onclick="calculatePCOSRisk()" class="assessment-btn">Get Assessment</button>
+            <div id="riskResult" class="risk-result"></div>
+          </div>
+
+          <div class="pcos-info">
+            <h4>Understanding PCOS/PCOD</h4>
+            <div class="info-cards">
+              <div class="info-card">
+                <h5>What is PCOS?</h5>
+                <p>Polycystic Ovary Syndrome is a hormonal disorder affecting reproductive-aged women, characterized by irregular periods, excess male hormones, and polycystic ovaries.</p>
+              </div>
+              <div class="info-card">
+                <h5>Management Tips</h5>
+                <ul>
+                  <li>Maintain a healthy weight</li>
+                  <li>Exercise regularly (30 mins daily)</li>
+                  <li>Follow a balanced, low-glycemic diet</li>
+                  <li>Manage stress through meditation</li>
+                  <li>Get adequate sleep (7-8 hours)</li>
+                </ul>
+              </div>
+              <div class="info-card">
+                <h5>When to See a Doctor</h5>
+                <p>Consult a healthcare provider if you experience irregular periods for more than 3 months, excessive hair growth, severe acne, or difficulty conceiving.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nutrition Section -->
+      <div class="feature-card" id="nutrition-section">
+        <h3>Cycle-Synced Nutrition</h3>
+        <div class="nutrition-content">
+          <div class="phase-nutrition">
+            <div class="nutrition-phase">
+              <h4>🩸 Menstrual Phase (Days 1-5)</h4>
+              <div class="nutrition-tips">
+                <p><strong>Focus on:</strong> Iron-rich foods, anti-inflammatory foods</p>
+                <ul>
+                  <li>Leafy greens (spinach, kale)</li>
+                  <li>Red meat, lentils, quinoa</li>
+                  <li>Dark chocolate (70%+ cacao)</li>
+                  <li>Ginger tea for cramps</li>
+                  <li>Turmeric for inflammation</li>
+                </ul>
+                <p><strong>Avoid:</strong> Processed foods, excessive caffeine, alcohol</p>
+              </div>
+            </div>
+
+            <div class="nutrition-phase">
+              <h4>🌱 Follicular Phase (Days 1-13)</h4>
+              <div class="nutrition-tips">
+                <p><strong>Focus on:</strong> Fresh, light foods to support rising energy</p>
+                <ul>
+                  <li>Fresh fruits and vegetables</li>
+                  <li>Fermented foods (kimchi, yogurt)</li>
+                  <li>Lean proteins (fish, chicken)</li>
+                  <li>Sprouted seeds and grains</li>
+                  <li>Green tea</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="nutrition-phase">
+              <h4>🥚 Ovulatory Phase (Days 12-16)</h4>
+              <div class="nutrition-tips">
+                <p><strong>Focus on:</strong> Antioxidant-rich foods, fiber</p>
+                <ul>
+                  <li>Berries and citrus fruits</li>
+                  <li>Colorful vegetables</li>
+                  <li>Whole grains</li>
+                  <li>Coconut and avocado</li>
+                  <li>Herbal teas</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="nutrition-phase">
+              <h4>🌙 Luteal Phase (Days 17-28)</h4>
+              <div class="nutrition-tips">
+                <p><strong>Focus on:</strong> Magnesium, B-vitamins, complex carbs</p>
+                <ul>
+                  <li>Magnesium-rich foods (pumpkin seeds, almonds)</li>
+                  <li>Complex carbohydrates (sweet potato, oats)</li>
+                  <li>Calcium sources (dairy, sesame seeds)</li>
+                  <li>Mood-supporting foods (bananas, turkey)</li>
+                  <li>Chamomile tea for PMS</li>
+                </ul>
+                <p><strong>Limit:</strong> Salt, sugar, caffeine to reduce PMS symptoms</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="hydration-tracker">
+            <h4>💧 Daily Water Intake</h4>
+            <p>Track your daily water consumption (aim for 8-10 glasses)</p>
+            <div class="water-counter">
+              <button onclick="addWaterGlass()">+ Add Glass</button>
+              <span id="waterCount">0</span> / 8 glasses
+              <button onclick="resetWaterCount()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educational Articles -->
+      <div class="feature-card" id="articles-section">
+        <h3>Health Articles & Resources</h3>
+        <div class="articles-content">
+          <div class="article-grid">
+            <article class="article-card" onclick="openArticle('hormones')">
+              <h4>Understanding Your Hormones</h4>
+              <p>Learn about estrogen, progesterone, and how they affect your cycle and mood throughout the month.</p>
+            </article>
+            
+            <article class="article-card" onclick="openArticle('exercise')">
+              <h4>Exercise and Your Cycle</h4>
+              <p>Discover how to adapt your workout routine to different phases of your menstrual cycle for optimal results.</p>
+            </article>
+            
+            <article class="article-card" onclick="openArticle('fertility')">
+              <h4>Understanding Fertility</h4>
+              <p>Learn about ovulation, fertile windows, and natural fertility tracking methods.</p>
+            </article>
+            
+            <article class="article-card" onclick="openArticle('pms')">
+              <h4>Managing PMS Naturally</h4>
+              <p>Natural remedies and lifestyle changes to help manage PMS symptoms effectively.</p>
+            </article>
+            
+            <article class="article-card" onclick="openArticle('myths')">
+              <h4>Period Myths Debunked</h4>
+              <p>Separating fact from fiction about menstruation and women's health.</p>
+            </article>
+            
+            <article class="article-card" onclick="openArticle('mental-health')">
+              <h4>Mental Health & Cycles</h4>
+              <p>Understanding the connection between your menstrual cycle and mental wellbeing.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Article Modal -->
+  <div id="articleModal" class="modal">
+    <div class="modal-content article-modal-content">
+      <span class="close" onclick="closeArticleModal()">&times;</span>
+      <div id="articleContent"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

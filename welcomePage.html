@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SheSync</title>
+  <link rel="stylesheet" href="welcomePage.css">
+</head>
+<body>
+  <!-- Nav Bar -->
+  <header class="navbar">
+    <div class="logo-with-text">
+    <img src="LOGOO.png" alt="SheSync Logo" />
+    <span class="brand-name">SheSync</span>
+  </div>
+
+     <nav class="nav-links">
+    <a href="#home">Home</a>
+    <a href="javascript:void(0)" onclick="openModal('whyModal')">Why SheSync</a>
+    
+  </nav>
+
+<div class="auth-buttons">
+    
+<button onclick="openModal('loginModal')" class="nav-btn">Log In</button>
+<button onclick="openModal('signupModal')" class="nav-btn sign-up">Sign Up</button>
+
+<!-- Log In Modal -->
+<div id="loginModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('loginModal')">&times;</span>
+    <h2>Log In</h2>
+    <p>Access your personalized dashboard and continue tracking your cycle.</p>
+    <form id="login-form">
+      <input type="email" placeholder="Email" class="modal-input" id="login-email" required />
+      <input type="password" placeholder="Password" class="modal-input" id="login-password" required />
+      <button type="submit" class="modal-btn">Log In</button>
+    </form>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('signupModal')">&times;</span>
+    <h2>Sign Up</h2>
+    <p>Create your SheSync account and start your wellness journey today.</p>
+    
+    <!-- ADD the form and id here -->
+    <form id="signup-form">
+      <input type="email" placeholder="Email" class="modal-input" id="signup-email" required />
+      <input type="password" placeholder="Password" class="modal-input" id="signup-password" required />
+      <button type="submit" class="modal-btn">Sign Up</button>
+    </form>
+  </div>
+</div>
+
+    </div>
+  </header>
+
+  <!-- Why SheSync Modal -->
+<div id="whyModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('whyModal')">&times;</span>
+    <h2>Why SheSync?</h2>
+    <p>
+      SheSync is more than a period tracker. It’s your companion for cycle awareness, symptom logging, nutrition advice, and understanding conditions like PCOD/PCOS. With a supportive and easy-to-use interface, we help women take charge of their health—day by day, month by month.
+    </p>
+  </div>
+</div>
+
+
+<!-- main part -->
+  <section class="welcome-section">
+  <div class="welcome-content">
+    <h2 class="brand-name">SheSync</h2>
+    <h1 class="main-heading">Empowering You, Every Day of the Month</h1>
+    <p class="subheading">Log symptoms, track your period, and get personalized health tips</p>
+  </div>
+   <div class="image-container">
+        
+        <img src="Screenshot_2025-06-21_at_9.02.05_PM-removebg-preview.png" alt="Illustration" class="welcome-image">
+      </div>
+</section>
+
+
+
+
+<!-- For the cards -->
+<section class="card-section">
+  <div class="card-grid">
+    <div class="card" onclick="openModal('modal1')">
+      <h3>TRACK YOUR CYCLE</h3>
+    </div>
+    <div class="card" onclick="openModal('modal2')">
+      <h3>PCOS & PCOD SUPPORT</h3>
+    </div>
+    <div class="card" onclick="openModal('modal3')">
+      <h3>GET NUTRITION TIPS</h3>
+    </div>
+    <div class="card" onclick="openModal('modal4')">
+      <h3>LEARN WITH ARTICLES</h3>
+    </div>
+  </div>
+</section>
+
+<!-- Modals -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal1')">&times;</span>
+    <h2>Track Your Cycle</h2>
+    <p>
+      Keep tabs on your menstrual cycle, symptoms, and mood changes. Understand your patterns, anticipate your period, and sync your lifestyle accordingly. SheSync helps you stay informed and feel more in control of your health journey.
+    </p>
+  </div>
+</div>
+
+<div id="modal2" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal2')">&times;</span>
+    <h2>Understand PCOS</h2>
+    <p>
+      PCOD and PCOS affect many women and are often misunderstood.  
+    SheSync helps you understand their signs, causes, and treatments.  
+    Track symptoms, explore lifestyle changes, and find the support you deserve.  
+    You are not alone — we're here with you, every step of the way.
+    </p>
+  </div>
+</div>
+
+<div id="modal3" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal3')">&times;</span>
+    <h2>Get Nutrition Tips</h2>
+    <p>
+      Food is medicine—especially for hormonal health. Discover foods that support each phase of your cycle, fight PMS, and stabilize energy levels. SheSync provides curated tips to fuel your body the right way.
+    </p>
+  </div>
+</div>
+
+<div id="modal4" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal('modal4')">&times;</span>
+    <h2>Learn with Articles</h2>
+    <p>
+      Get access to simple, science-backed articles that help you understand your body. Whether you're curious about hormones, cycle syncing, or women’s health myths—SheSync gives you facts you can trust.
+    </p>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- LINK JS -->
+<script type="module" src="welcomePage.js"></script>
+
+
+</body>
+
+</html>

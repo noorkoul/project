@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SheSync - Risk Insights</title>
+<link rel="stylesheet" href="riskinsights.css">
+  
+</head>
+<body>
+ <div class="container">
+  <h2>💡 SheSync Risk Insights</h2>
+  <p>Check symptoms you're experiencing regularly:</p>
+
+  <form id="riskForm">
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Irregular periods
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Excess facial/body hair
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Persistent acne
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Unexplained weight gain
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Hair thinning or hair fall
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Mood swings
+    </label>
+
+    <label class="custom-checkbox">
+      <input type="checkbox" name="symptom">
+      <span class="checkmark"></span>
+      Bloating or fatigue
+    </label>
+
+    <button type="button" onclick="calculateRisk()">Get Insights</button>
+  </form>
+
+  <div id="result"></div>
+</div>
+
+  <script>
+    function calculateRisk() {
+      const checkboxes = document.querySelectorAll('input[name="symptom"]:checked');
+      const score = checkboxes.length;
+
+      let resultText = '';
+      let className = '';
+
+      if (score <= 2) {
+        resultText = "Your current symptoms suggest a low risk. Keep tracking and maintain a healthy lifestyle. 🧘‍♀️";
+        className = "low";
+      } else if (score <= 4) {
+        resultText = "You're showing moderate signs. It might be a good idea to talk to a healthcare provider. 🩺";
+        className = "medium";
+      } else {
+        resultText = "Multiple symptoms detected. A check-up is strongly recommended. Your health matters! ❤️";
+        className = "high";
+      }
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `<p class="${className}">${resultText}</p>`;
+    }
+  </script>
+  <script src="riskinsights.js"></script>
+</body>
+</html>

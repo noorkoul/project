@@ -1,0 +1,319 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+}
+
+/* Navbar styles */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #FADADD; /* soft blush pink */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 100px;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #E07A8E; /* deeper rose for contrast */
+}
+
+.logo img {
+  height: 60px;
+}
+
+#logoo {
+    height: 100px;
+    width: 110px;
+    /* padding: 2%;
+    margin: 3%; */
+}
+
+.logo-with-text {
+  display: flex;
+  align-items: center;
+}
+
+.logo-with-text img {
+  height: 60px;
+  margin-right: 10px;
+}
+
+
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #947C7C;
+  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+  transition: color 0.3s ease;
+  font-size: 17px;
+}
+
+.auth-buttons a {
+  margin-left: 15px;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.login-btn {
+  background-color: transparent;
+  color: #E07A8E;
+  border: 1.5px solid #E07A8E;
+}
+
+.login-btn:hover {
+  background-color: #E07A8E;
+  color: white;
+}
+
+.signup-btn {
+  background-color: #E07A8E;
+  color: white;
+  border: none;
+}
+
+.signup-btn:hover {
+  background-color: #d1677d;
+}
+
+.welcome-section {
+  background-color: #FFF0F5; /* very soft pastel pink */
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.welcome-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.brand-name {
+  font-size: 1.75rem;
+  color: 	#E6A4A4;
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-family: playfair display;
+}
+
+.main-heading {
+  font-size: 2.2rem;
+  color: #D36C6C;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-family: poppins;
+}
+
+.subheading {
+  font-size: 1.1rem;
+  color: #947C7C;
+  margin-bottom: 30px;
+  font-family: quicksand;
+}
+
+
+.image-container {
+  flex: 1;
+  min-width: 300px;
+  padding: 20px;
+  text-align: center;
+}
+
+.welcome-image {
+  max-width: 30%;
+  height: auto;
+  border-radius: 20px;
+}
+
+/* For the cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  padding: 20px;
+}
+
+.card {
+  background-color: #fbe9e9;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.card h3 {
+  color: #D36C6C;
+  font-size: 1.1rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background-color: #fff0f3;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 60%;
+  max-width: 600px;
+  color: #633c3c;
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  color: #D36C6C;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  font-size: 1.5rem;
+  color: #cc5a5a;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Navigation buttons, login signup */
+.nav-btn {
+  border: 1px solid #e5a5a5;
+  background-color: transparent;
+  color: #d36c6c;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+
+.nav-btn:hover {
+  background-color: #E07A8E;
+  color: white;
+}
+
+
+.nav-btn.sign-up {
+   background-color: #E07A8E;
+  color: white;
+  border: none;
+}
+
+.nav-btn.signup:hover {
+  background-color: #d1677d;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff0f3;
+  margin: 8% auto;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  text-align: center;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content h2 {
+  color: #d36c6c;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  color: #7a5c5c;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border: 1px solid #e0b7b7;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.modal-btn {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background-color: #d36c6c;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-btn:hover {
+  background-color: #c15757;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 1.4rem;
+  color: #d36c6c;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.95);}
+  to {opacity: 1; transform: scale(1);}
+}

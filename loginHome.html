@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SheSync</title>
+
+  <!-- FullCalendar -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="loginHome.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo-with-text">
+      <img src="LOGOO.png" alt="SheSync Logo" />
+      <span class="brand-name">SheSync</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Insights</a>
+    </nav>
+    <a href="#" id="openLogoutModal" class="logout-link">Logout</a>
+  </header>
+
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeLogoutModal">&times;</span>
+      <h3>Are you sure you want to log out?</h3>
+      <div class="logout-buttons">
+        <button id="confirmLogout" class="logout-confirm">Yes, Logout</button>
+        <button id="cancelLogout" class="logout-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="main-container">
+    <div class="calendar-section">
+      <div id="calendar"></div>
+    </div>
+
+    <div class="options-section">
+      <button class="feature-button" onclick="goToCyclePage()">Track Your Cycle</button>
+      <button class="feature-button" onclick="goToPCODPage()">PCOD/PCOS Risks</button>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="loginHome.js"></script>
+</body>
+</html>

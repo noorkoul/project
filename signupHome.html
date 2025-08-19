@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SheSync</title>
+  <!-- FullCalendar CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
+  <link rel="stylesheet" href="signupHome.css"/>
+</head>
+<body>
+
+  <!-- Nav Bar -->
+  <header class="navbar">
+    <div class="logo-with-text">
+      <img src="LOGOO.png" alt="SheSync Logo" />
+      <span class="brand-name">SheSync</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#insights">Insights</a>
+    </nav>
+    <a href="#" id="openLogoutModal" class="logout-link">Logout</a>
+  </header>
+
+  <!-- Logout Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeLogoutModal">&times;</span>
+      <h3>Are you sure you want to log out?</h3>
+      <div class="logout-buttons">
+        <button id="confirmLogout" class="logout-confirm">Yes, Logout</button>
+        <button id="cancelLogout" class="logout-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Give Info Button Section -->
+  <div class="info-section">
+    <button id="give-info-btn">Start your Journey</button>
+  </div>
+
+  <!-- Info Modal -->
+  <div id="info-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('info-modal')">&times;</span>
+      <h2>Your Info</h2>
+      
+      <label for="age-group">Select Age Group:</label>
+      <select id="age-group">
+        <option value="under18">Under 18</option>
+        <option value="18-25">18–25</option>
+        <option value="26-35">26–35</option>
+        <option value="36+">36+</option>
+      </select>
+
+      <br><br>
+
+      <label>Conditions:</label><br>
+      <input type="checkbox" id="pcos" value="PCOS"> PCOS<br>
+      <input type="checkbox" id="pcod" value="PCOD"> PCOD<br>
+      <input type="checkbox" id="other" value="Other"> Other<br>
+
+      <br>
+      <button onclick="submitInfo()">Submit</button>
+    </div>
+  </div>
+
+  <div class="main-container">
+  <!-- Left: Calendar -->
+  <div class="calendar-section">
+    <div id="calendar"></div>
+  </div>
+
+  <!-- Right: Options -->
+  <div class="options-section">
+    <button class="feature-button" onclick="goToCyclePage()">Track Your Cycle</button>
+    <button class="feature-button" onclick="goToPCODPage()">PCOD/PCOS Risks</button>
+  </div>
+</div>
+
+
+  <script type="module" src="signupHome.js"></script>
+</body>
+</html>

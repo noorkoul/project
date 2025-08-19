@@ -1,0 +1,158 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Base */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #FFF0F5;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #FADADD;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.logo-with-text {
+  display: flex;
+  align-items: center;
+}
+
+.logo-with-text img {
+  height: 60px;
+  margin-right: 10px;
+}
+
+.brand-name {
+  font-size: 1.75rem;
+  color: #E6A4A4;
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+}
+
+.nav-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #947C7C;
+  font-weight: 600;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.logout-link {
+  color: #d26a94;
+  font-weight: 600;
+  text-decoration: none;
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+}
+
+/* Main content */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 40px;
+  gap: 30px;
+}
+
+.calendar-section {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.options-section {
+  flex: 0.6;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.feature-button {
+  padding: 18px;
+  font-size: 1.1rem;
+  background-color: #ffe4ec;
+  border: 2px solid #f4a6bc;
+  border-radius: 14px;
+  color: #c71585;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.feature-button:hover {
+  background-color: #f4a6bc;
+  color: white;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 16px;
+  text-align: center;
+  font-family: 'Quicksand';
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.modal-content h3 {
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.logout-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.logout-confirm {
+  background-color: #d26a94;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: Quicksand;
+  cursor: pointer;
+}
+
+.logout-cancel {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-family: Quicksand;
+  cursor: pointer;
+}
+
+.close {
+  float: right;
+  font-size: 22px;
+  cursor: pointer;
+}
