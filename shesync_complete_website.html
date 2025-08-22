@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheSync - Your Complete Women's Health Companion</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff6b9d">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #ff6b9d;
+            --secondary-pink: #ffb3d1;
+            --light-pink: #ffeef7;
+            --pale-pink: #fff0f5;
+            --rose: #c44569;
+            --peach: #ffb6c1;
+            --lavender: #e6d7ff;
+            --text-dark: #2c2c2c;
+            --text-muted: #666;
+            --white: #ffffff;
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--pale-pink) 0%, var(--light-pink) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .logo::before {
+            content: "🌸";
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--lavender) 100%);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-pink);
+        }
+
+        /* Feature Sections */
+        .feature-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .feature-section.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .feature-section:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-pink);
+            margin: 0;
+        }
+
+        /* Cycle Tracking */
+        .cycle-input-section {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--lavender) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--primary-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-pink);
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--white);
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(135deg, var(--secondary-pink) 0%, var(--peach) 100%);
+            color: var(--text-dark);
+        }
+
+        /* Prediction Results */
+        .prediction-results {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .prediction-results.show {
+            display: block;
+            animation: slideInUp 0.5s ease;
+        }
+
+        .prediction-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .prediction-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .prediction-card h4 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Symptom Tracker */
+        .symptom-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .symptom-group {
+            background: var(--light-pink);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border-left: 5px solid var(--primary-pink);
+        }
+
+        .symptom-group h3 {
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .symptom-item {
+            display: flex;
+            align-items: center;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            background: var(--white);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .symptom-item:hover {
+            background: var(--pale-pink);
+            transform: translateX(5px);
+        }
+
+        .symptom-item input {
+            margin-right: 0.8rem;
+            accent-color: var(--primary-pink);
+            transform: scale(1.2);
+        }
+
+        .severity-slider {
+            margin-left: auto;
+            width: 80px;
+        }
+
+        /* PCOS Assessment */
+        .assessment-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-pink);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--light-pink);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-item:hover {
+            background: var(--secondary-pink);
+        }
+
+        .radio-item input {
+            accent-color: var(--primary-pink);
+        }
+
+        .risk-result {
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            text-align: center;
+            display: none;
+        }
+
+        .risk-result.show {
+            display: block;
+            animation: bounceIn 0.6s ease;
+        }
+
+        .risk-result.low {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .risk-result.moderate {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .risk-result.high {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .risk-score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .recommendations {
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            background: rgba(255,255,255,0.3);
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-pink);
+        }
+
+        /* Nutrition Guide */
+        .nutrition-phases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phase-card {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--lavender) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-pink) 0%, var(--rose) 100%);
+        }
+
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .food-item {
+            background: var(--white);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .food-item:hover {
+            background: var(--pale-pink);
+            transform: scale(1.05);
+        }
+
+        /* Articles Section */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .article-header {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            color: var(--white);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .article-header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid var(--rose);
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content {
+            padding: 2rem;
+        }
+
+        /* Analytics Dashboard */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Health Insights */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .insight-card {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--lavender) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid var(--secondary-pink);
+        }
+
+        .insight-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-pink);
+        }
+
+        .insight-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-title {
+            color: var(--primary-pink);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .insight-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--rose);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Export Tools */
+        .export-tools {
+            background: linear-gradient(135deg, var(--lavender) 0%, var(--light-pink) 100%);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            to {
+                left: 100%;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .nav-link {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .input-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .symptom-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nutrition-phases {
+                grid-template-columns: 1fr;
+            }
+            
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 25px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--primary-pink);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            color: var(--rose);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            color: var(--white);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1500;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">SheSync</div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active" onclick="showSection('home')">Home</a>
+                <a href="dashboard.html" class="nav-link" onclick="showSection('cycle')">Cycle Tracker</a>
+                <a href="riskinsights.html" class="nav-link" onclick="showSection('pcos')">PCOS Assessment</a>
+                <a href="#nutrition" class="nav-link" onclick="showSection('nutrition')">Nutrition</a>
+                <a href="#articles" class="nav-link" onclick="showSection('articles')">Learn</a>
+                <a href="#analytics" class="nav-link" onclick="showSection('analytics')">Analytics</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Home Section -->
+        <section id="home" class="feature-section active">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome to SheSync</h1>
+                <p class="welcome-subtitle">Your comprehensive women's health companion. Track your cycle, monitor symptoms, get personalized insights, and take control of your health journey.</p>
+                
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="tracked-days">0</div>
+                        <div>Days Tracked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="cycle-count">0</div>
+                        <div>Cycles Recorded</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="prediction-accuracy">--</div>
+                        <div>Prediction Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="health-score">--</div>
+                        <div>Health Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-icon">🌙</div>
+                    <h3 class="insight-title">Current Phase</h3>
+                    <div class="insight-value" id="current-phase">--</div>
+                    <p id="phase-description">Start tracking to see your current cycle phase</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">📅</div>
+                    <h3 class="insight-title">Next Period</h3>
+                    <div class="insight-value" id="next-period">--</div>
+                    <p id="next-period-days">Add your last period date to get predictions</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">💝</div>
+                    <h3 class="insight-title">Fertile Window</h3>
+                    <div class="insight-value" id="fertile-status">--</div>
+                    <p id="fertile-description">Track your cycle for fertility insights</p>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">🎯</div>
+                    <h3 class="insight-title">Wellness Score</h3>
+                    <div class="insight-value" id="wellness-score">--</div>
+                    <p id="wellness-description">Based on your symptoms and tracking</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cycle Tracking Section -->
+        <section id="cycle" class="feature-section">
+            <div class="section-header">
+                <span class="section-icon">📅</span>
+                <h2 class="section-title">Advanced Cycle Tracking</h2>
+            </div>
+
+            <div class="cycle-input-section">
+                <h3>📊 Cycle Information</h3>
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="last-period">Last Period Start Date</label>
+                        <input type="date" id="last-period" onchange="updatePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="cycle-length">Average Cycle Length (days)</label>
+                        <input type="number" id="cycle-length" value="28" min="21" max="45" onchange="updatePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="period-length">Period Duration (days)</label>
+                        <input type="number" id="period-length" value="5" min="1" max="10" onchange="updatePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="age">Your Age</label>
+                        <input type="number" id="age" min="13" max="60" placeholder="25">
+                    </div>
+                    <div class="input-group">
+                        <label for="stress-level">Current Stress Level</label>
+                        <select id="stress-level">
+                            <option value="1">Low</option>
+                            <option value="2">Moderate</option>
+                            <option value="3">High</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        

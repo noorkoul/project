@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SheSync - Your Complete Women's Health Companion</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff6b9d">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #ff6b9d;
+            --secondary-pink: #ffb3d1;
+            --light-pink: #ffeef7;
+            --pale-pink: #fff0f5;
+            --rose: #c44569;
+            --peach: #ffb6c1;
+            --lavender: #e6d7ff;
+            --text-dark: #2c2c2c;
+            --text-muted: #666;
+            --white: #ffffff;
+            --shadow: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--pale-pink) 0%, var(--light-pink) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            padding: 1rem 2rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        .logo::before {
+            content: "🌸";
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Sections */
+        .page-section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 30px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--light-pink) 0%, var(--lavender) 100%);
+            padding: 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-pink);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+        }
+
+        /* Calendar Styles */
+        .calendar-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-nav {
+            background: var(--primary-pink);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav:hover {
+            background: var(--rose);
+            transform: scale(1.05);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: var(--secondary-pink);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-cell {
+            background: var(--white);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .calendar-cell:hover {
+            background: var(--light-pink);
+        }
+
+        .calendar-cell.period {
+            background: #ff6b9d;
+            color: white;
+        }
+
+        .calendar-cell.fertile {
+            background: #90ee90;
+            color: var(--text-dark);
+        }
+
+        .calendar-cell.ovulation {
+            background: #ffd700;
+            color: var(--text-dark);
+        }
+
+        .calendar-cell.today {
+            border: 2px solid var(--primary-pink);
+            font-weight: bold;
+        }
+
+        .calendar-cell.other-month {
+            color: var(--text-muted);
+            background: #f8f9fa;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 600;
+            color: var(--primary-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input,
+        .input-group select {
+            padding: 0.8rem;
+            border: 2px solid var(--secondary-pink);
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-pink);
+            box-shadow: 0 0 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Nutrition Cards */
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .phase-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .phase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .phase-header {
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--rose) 100%);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .phase-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-content {
+            padding: 2rem;
+        }
+
+        .food-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .food-category h4 {
+            color: var(--primary-pink);
+            margin-bottom: 0.5rem;
+        }
+
+        .food-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .food-item {
+            background: var(--light-pink);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* PCOS Assessment */
+        .assessment-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .question-card {
+            background: var(--light-pink);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-pink);
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--white);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-item:hover {
+            background: var(--secondary-pink);
+        }
+
+        /* Symptoms Grid */
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .symptom-category {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .symptom-category h3 {
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .symptom-item {
+            display: flex;
+            align-items: center;
+            margin: 0.8rem 0;
+            padding: 0.8rem;
+            background: var(--light-pink);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .symptom-item:hover {
+            background: var(--pale-pink);
+            transform: translateX(5px);
+        }
+
+        .symptom-item input {
+            margin-right: 0.8rem;
+            accent-color: var(--primary-pink);
+        }
+
+        /* Analytics Charts */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .chart-title {
+            font-size: 1.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        /* Results Display */
+        .results-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .risk-score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .risk-moderate {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+        }
+
+        .risk-high {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary-pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-link {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.9rem;
+            }
+            
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                font-size: 0.9rem;
+            }
+            
+            .calendar-cell {
+                padding: 0.5rem;
+                min-height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">SheSync</div>
+            <div class="nav-links">
+                <div class="nav-link active" onclick="showPage('home')" >🏠 Home </a></div>
+                <div class="nav-link" onclick="showPage('cycle')">📅 Cycle</div>
+                <div class="nav-link" onclick="showPage('symptoms')">💊 Symptoms</div>
+                <div class="nav-link" onclick="showPage('pcos')">🔬 PCOS</div>
+                <div class="nav-link" onclick="showPage('nutrition')">🥗 Nutrition</div>
+                <div class="nav-link" onclick="showPage('analytics')">📊 Analytics</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Home Page -->
+        <section id="home-page" class="page-section active">
+            <div class="welcome-section">
+                <h1 class="welcome-title">Welcome to SheSync</h1>
+                <p class="welcome-subtitle">Your comprehensive women's health companion. Track your cycle, monitor symptoms, get personalized insights, and take control of your health journey.</p>
+                
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="tracked-days">0</div>
+                        <div>Days Tracked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="cycle-count">0</div>
+                        <div>Cycles Recorded</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="prediction-accuracy">85%</div>
+                        <div>Prediction Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="health-score">78</div>
+                        <div>Health Score</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card" onclick="showPage('cycle')">
+                    <div class="card-icon">📅</div>
+                    <h3 class="card-title">Cycle Tracker</h3>
+                    <p>Track your menstrual cycle, predict next periods, and identify fertile windows with AI-powered predictions.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Next Period: </span>
+                        <span id="next-period-preview">--</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" onclick="showPage('symptoms')">
+                    <div class="card-icon">💊</div>
+                    <h3 class="card-title">Symptom Tracker</h3>
+                    <p>Log daily physical and emotional symptoms to better understand your body's patterns and cycles.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Current Phase: </span>
+                        <span id="current-phase-preview">--</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" onclick="showPage('pcos')">
+                    <div class="card-icon">🔬</div>
+                    <h3 class="card-title">PCOS Assessment</h3>
+                    <p>Complete our comprehensive PCOS risk assessment based on medical datasets and research.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Risk Level: </span>
+                        <span id="risk-level-preview">Not Assessed</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" onclick="showPage('nutrition')">
+                    <div class="card-icon">🥗</div>
+                    <h3 class="card-title">Nutrition Guide</h3>
+                    <p>Get personalized nutrition recommendations based on your cycle phase and hormonal changes.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Today's Focus: </span>
+                        <span id="nutrition-focus-preview">Iron & Protein</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" onclick="showPage('analytics')">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Health Analytics</h3>
+                    <p>View detailed analytics, trends, and insights about your menstrual health over time.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Avg Cycle: </span>
+                        <span id="avg-cycle-preview">28 days</span>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" onclick="showEducation()">
+                    <div class="card-icon">📚</div>
+                    <h3 class="card-title">Health Education</h3>
+                    <p>Access educational resources about menstrual health, hygiene, and wellness.</p>
+                    <div style="margin-top: 1rem;">
+                        <span style="color: var(--primary-pink); font-weight: bold;">Latest: </span>
+                        <span>Understanding PCOS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cycle Tracker Page -->
+        <section id="cycle-page" class="page-section">
+            <div class="form-container">
+                <h2>🔮 Cycle Tracking & Prediction</h2>
+                <p>Enter your cycle information to get AI-powered predictions based on medical datasets.</p>
+                
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="last-period">Last Period Start Date</label>
+                        <input type="date" id="last-period" onchange="updateCyclePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="cycle-length">Average Cycle Length (days)</label>
+                        <input type="number" id="cycle-length" value="28" min="21" max="45" onchange="updateCyclePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="period-length">Period Duration (days)</label>
+                        <input type="number" id="period-length" value="5" min="1" max="10" onchange="updateCyclePredictions()">
+                    </div>
+                    <div class="input-group">
+                        <label for="age">Your Age</label>
+                        <input type="number" id="age" min="13" max="60" placeholder="25" onchange="updateCyclePredictions()">
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="saveCycleData()">💾 Save Cycle Data</button>
+                <button class="btn" onclick="exportCycleData()" style="margin-left: 1rem;">📤 Export Data</button>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="changeMonth(-1)">‹ Previous</button>
+                    <h3 id="calendar-month">December 2024</h3>
+                    <button class="calendar-nav" onclick="changeMonth(1)">Next ›</button>
+                </div>
+                
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Calendar will be populated by JavaScript -->
+                </div>
+                
+                <div style="margin-top: 1rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 20px; height: 20px; background: #ff6b9d; border-radius: 4px;"></div>
+                        <span>Period Days</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 20px; height: 20px; background: #90ee90; border-radius: 4px;"></div>
+                        <span>Fertile Window</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 20px; height: 20px; background: #ffd700; border-radius: 4px;"></div>
+                        <span>Ovulation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-container" id="cycle-predictions" style="display: none;">
+                <h3>📊 Your Cycle Predictions</h3>
+                <div class="form-grid" style="margin-top: 2rem;">
+                    <div>
+                        <h4>🌙 Current Phase</h4>
+                        <p id="current-phase-detail">--</p>
+                    </div>
+                    <div>
+                        <h4>📅 Next Period</h4>
+                        <p id="next-period-detail">--</p>
+                    </div>
+                    <div>
+                        <h4>💕 Fertile Window</h4>
+                        <p id="fertile-window-detail">--</p>
+                    </div>
+                    <div>
+                        <h4>🥚 Ovulation Day</h4>
+                        <p id="ovulation-detail">--</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Symptoms Page -->
+        <section id="symptoms-page" class="page-section">
+            <div class="form-container">
+                <h2>💊 Daily Symptom Tracking</h2>
+                <p>Track your daily symptoms to identify patterns and improve your health insights.</p>
+                
+                <div class="input-group" style="margin-bottom: 2rem;">
+                    <label for="symptom-date">Date</label>
+                    <input type="date" id="symptom-date">
+                </div>
+            </div>
+
+            <div class="symptoms-grid">
+                <div class="symptom-category">
+                    <h3>🩸 Physical Symptoms</h3>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="cramps">
+                        <label for="cramps">Menstrual Cramps</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="headache">
+                        <label for="headache">Headache</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="bloating">
+                        <label for="bloating">Bloating</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="breast-tenderness">
+                        <label for="breast-tenderness">Breast Tenderness</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="fatigue">
+                        <label for="fatigue">Fatigue</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="nausea">
+                        <label for="nausea">Nausea</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                </div>
+
+                <div class="symptom-category">
+                    <h3>😊 Emotional Symptoms</h3>
+                    <div class="symptom-item">
+                        <input type="checkbox" id="mood-swings">
+                        <label for="mood-swings">Mood Swings</label>
+                        <input type="range" min="1" max="5" value="3" class="severity-slider" style="margin-left: auto; width: 80px;">
+                    </div>
+                
